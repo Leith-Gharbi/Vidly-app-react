@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 import * as movieServices from '../services/fakeMovieService';
-
-import Like from './common/like';
+import MoviesTable from './moviesTables';
 import Pagination from './common/pagination';
 import { paginate } from '../utils/paginate';
 import ListGroup from './common/listGroup';
@@ -51,42 +50,7 @@ class Movies extends Component {
             </div>
             <div className="col">
               <p>Showing {filtered.length} movies in the database.</p>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Genre</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col">Rate</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {movies.map((movie) => (
-                    <tr key={movie._id}>
-                      <th scope="row">{movie.title}</th>
-                      <td>{movie.genre.name}</td>
-                      <td>{movie.numberInStock}</td>
-                      <td>{movie.dailyRentalRate}</td>
-                      <td>
-                        <Like
-                          liked={movie.liked}
-                          onClick={() => this.handelLike(movie)}
-                        />
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => this.handleClick(movie)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <MoviesTable movies={movies} onLike={this.handleLike} onDelete={this.handleDelete}></MoviesTable>
               <Pagination
                 itemsCount={filtered.length}
                 pageSize={pageSize}
@@ -114,7 +78,7 @@ class Movies extends Component {
     this.setState({ movies });
   };
 
-  handleClick = (movie) => {
+  handleDelete = (movie) => {
     // const { movies } = this.state;
     // const updatedMovies = movies.splice(movies.indexOf(movie), 1);
     // this.setState({
