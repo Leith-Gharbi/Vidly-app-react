@@ -1,33 +1,25 @@
 import React, { Component } from 'react';
+import  TableHeader  from './common/tableHeader';
 import Like from './common/like';
 
 class MoviesTable extends Component {
-
-  raiseSort = path =>{
-    const sortColumn = { ...this.props.sortColumn };
-    if (sortColumn.path === path)
-      sortColumn.order = sortColumn.order === 'asc' ? 'desc' : 'asc';
-    else {
-      sortColumn.path = path;
-      sortColumn.order = 'asc';
-    }
-    this.props.onSort(sortColumn);
-
-  };
-  render() { 
-    const {movies , onDelete ,onLike}=this.props;
+  columns = [
+    { path: 'title', label: 'Title' },
+    { path: 'genre.name', label: 'Genre' },
+    { path: 'numberInStock', label: 'Stock' },
+    { path: 'dailyRentalRate', label: 'Rate' },
+    {key:"Like"},
+    {key:"delete"},
+  ];
+  render() {
+    const { movies, onDelete, onLike, onSort, sortColumn } = this.props;
     return (
       <table className="table">
-        <thead>
-          <tr>
-            <th onClick={()=> this.raiseSort("title")} scope="col">Title</th>
-            <th onClick={()=> this.raiseSort("genre.name")}  scope="col">Genre</th>
-            <th onClick={()=> this.raiseSort("numberInStock")} scope="col">Stock</th>
-            <th onClick={()=> this.raiseSort("dailyRentalRate")} scope="col">Rate</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
+        <TableHeader
+          columns={this.columns}
+          sortColumn={sortColumn}
+          onSort={onSort}
+        ></TableHeader>
         <tbody>
           {movies.map((movie) => (
             <tr key={movie._id}>
@@ -36,10 +28,7 @@ class MoviesTable extends Component {
               <td>{movie.numberInStock}</td>
               <td>{movie.dailyRentalRate}</td>
               <td>
-                <Like
-                  liked={movie.liked}
-                  onClick={() => onLike(movie)}
-                />
+                <Like liked={movie.liked} onClick={() => onLike(movie)} />
               </td>
               <td>
                 <button
@@ -56,6 +45,5 @@ class MoviesTable extends Component {
     );
   }
 }
- 
 
 export default MoviesTable;
